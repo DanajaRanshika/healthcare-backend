@@ -4,12 +4,23 @@ import com.healthcaresystem.healthcare.entity.User;
 import com.healthcaresystem.healthcare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @PostMapping("/create-with-encryption")
+    public User createUserEncrypted(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userService.createUser(user);
+    }
+
 
     @Autowired
     private UserService userService;
