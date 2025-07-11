@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -24,6 +25,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody AuthenticationRequest authRequest) {
+        System.out.println("Login attempt: " + authRequest.getEmail());
+
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getEmail(),
@@ -31,7 +34,7 @@ public class AuthController {
                 )
         );
 
-        final UserDetails user = userDetailsService.loadUserByUsername(authRequest.getEmail());
+        UserDetails user = userDetailsService.loadUserByUsername(authRequest.getEmail());
         String token = jwtUtil.generateToken(user.getUsername());
 
         return new AuthenticationResponse(token);
