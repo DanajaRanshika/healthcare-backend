@@ -141,12 +141,6 @@ Use this token to access protected endpoints.
 
 ---
 
-## 📸 Screenshots (Optional)
-
-> Add your Swagger or Postman screenshots here if required for your submission.
-
----
-
 ## 🧾 License
 
 This project is for academic and learning purposes at NIBM Sri Lanka.
