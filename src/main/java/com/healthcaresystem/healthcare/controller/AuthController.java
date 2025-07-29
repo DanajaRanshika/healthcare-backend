@@ -2,6 +2,8 @@ package com.healthcaresystem.healthcare.controller;
 
 import com.healthcaresystem.healthcare.dto.AuthenticationRequest;
 import com.healthcaresystem.healthcare.dto.AuthenticationResponse;
+import com.healthcaresystem.healthcare.entity.User;
+import com.healthcaresystem.healthcare.repository.UserRepository;
 import com.healthcaresystem.healthcare.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
@@ -9,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -23,20 +24,21 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("/login")
-    public AuthenticationResponse login(@RequestBody AuthenticationRequest authRequest) {
-        System.out.println("Login attempt: " + authRequest.getEmail());
+    @Autowired
+    private UserRepository userRepository;
 
+    @PostMapping("/login")
+    public AuthenticationResponse login(@RequestBody AuthenticationRequest request) {
         authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authRequest.getEmail(),
-                        authRequest.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        UserDetails user = userDetailsService.loadUserByUsername(authRequest.getEmail());
-        String token = jwtUtil.generateToken(user.getUsername());
+        var userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        var token = jwtUtil.generateToken(userDetails.getUsername());
 
-        return new AuthenticationResponse(token);
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return new AuthenticationResponse(token, user.getId(), user.getRole());
     }
 }

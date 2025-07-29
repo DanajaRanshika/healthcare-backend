@@ -12,9 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 		name = "bearerAuth",
 		type = SecuritySchemeType.HTTP,
 		scheme = "bearer",
-		bearerFormat = "JWT"
-)
-
+		bearerFormat = "JWT")
 @SpringBootApplication
 @EnableMethodSecurity
 public class HealthcareApplication {

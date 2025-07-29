@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SecurityRequirement(name = "bearerAuth")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/records")
 public class MedicalRecordController {
@@ -78,5 +79,11 @@ public class MedicalRecordController {
         }
 
         return medicalRecordService.getRecordsByPatientId(id);
+    }
+    // ✅ Doctor: Get records created by them
+    @PreAuthorize("hasRole('DOCTOR')")
+    @GetMapping("/doctor/{id}")
+    public List<MedicalRecord> getRecordsForDoctor(@PathVariable Long id) {
+        return medicalRecordService.getRecordsByDoctorId(id);
     }
 }
