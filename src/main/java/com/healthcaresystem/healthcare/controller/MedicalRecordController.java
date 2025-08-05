@@ -1,5 +1,6 @@
 package com.healthcaresystem.healthcare.controller;
 
+import com.healthcaresystem.healthcare.dto.MedicalRecordRequest;
 import com.healthcaresystem.healthcare.entity.MedicalRecord;
 import com.healthcaresystem.healthcare.entity.User;
 import com.healthcaresystem.healthcare.security.JwtUtil;
@@ -31,10 +32,16 @@ public class MedicalRecordController {
     private UserService userService;
 
     // 🛡️ Only doctors can create records
+    @PostMapping("/create")
     @PreAuthorize("hasRole('DOCTOR')")
-    @PostMapping
-    public MedicalRecord createRecord(@RequestBody MedicalRecord record) {
-        return medicalRecordService.createRecord(record);
+    public MedicalRecord createRecordManually(@RequestBody MedicalRecordRequest request) {
+        return medicalRecordService.createRecord(
+                request.getDoctorId(),
+                request.getPatientId(),
+                request.getDiagnosis(),
+                request.getNote(),
+                request.getDate()
+        );
     }
 
     // 🛡️ Only doctors can view all records

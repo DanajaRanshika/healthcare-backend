@@ -15,6 +15,11 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
+    public List<User> getAllDoctors() {
+        return userRepository.findByRole("DOCTOR");
+    }
+
+    @Override
     public User createUser(User user) {
         return userRepository.save(user);
     }
@@ -51,4 +56,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Override
+    public List<User> findAllPatients() {
+        return userRepository.findByRole("PATIENT");
+    }
 }

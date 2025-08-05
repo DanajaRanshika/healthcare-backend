@@ -3,6 +3,7 @@ package com.healthcaresystem.healthcare.controller;
 import com.healthcaresystem.healthcare.entity.User;
 import com.healthcaresystem.healthcare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -38,6 +39,18 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/patients")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public List<User> getAllPatients() {
+        return userService.findAllPatients();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/doctors")
+    public List<User> getAllDoctors() {
+        return userService.getAllDoctors();
     }
 
     @PutMapping("/{id}")

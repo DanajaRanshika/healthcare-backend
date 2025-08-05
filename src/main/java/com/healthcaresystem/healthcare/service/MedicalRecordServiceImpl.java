@@ -1,10 +1,13 @@
 package com.healthcaresystem.healthcare.service;
 
 import com.healthcaresystem.healthcare.entity.MedicalRecord;
+import com.healthcaresystem.healthcare.entity.User;
 import com.healthcaresystem.healthcare.repository.MedicalRecordRepository;
+import com.healthcaresystem.healthcare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -13,8 +16,24 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
-    public MedicalRecord createRecord(MedicalRecord record) {
+    public MedicalRecord createRecord(Long doctorId, Long patientId, String diagnosis, String note, LocalDate date) {
+        User doctor = userRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        User patient = userRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        MedicalRecord record = new MedicalRecord();
+        record.setDoctor(doctor);
+        record.setPatient(patient);
+        record.setDiagnosis(diagnosis);
+        record.setNote(note);
+        record.setDate(date);
+
         return medicalRecordRepository.save(record);
     }
 

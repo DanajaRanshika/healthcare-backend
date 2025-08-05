@@ -3,6 +3,7 @@ package com.healthcaresystem.healthcare.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -16,14 +17,14 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // ✅ Load doctor info immediately
     @JoinColumn(name = "doctor_id")
-    @JsonIgnoreProperties({"password", "role", "email", "name", "hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"password", "role", "email", "hibernateLazyInitializer", "handler"})
     private User doctor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // ✅ Load patient info immediately
     @JoinColumn(name = "patient_id")
-    @JsonIgnoreProperties({"password", "role", "email", "name", "hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"password", "role", "email", "hibernateLazyInitializer", "handler"})
     private User patient;
 
     private String diagnosis;
