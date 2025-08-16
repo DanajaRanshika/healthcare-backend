@@ -47,7 +47,7 @@ public class UserController {
         return userService.findAllPatients();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT')")
     @GetMapping("/doctors")
     public List<User> getAllDoctors() {
         return userService.getAllDoctors();

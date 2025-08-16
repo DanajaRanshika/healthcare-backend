@@ -10,4 +10,7 @@ public interface AppointmentService {
     Appointment getAppointmentById(Long id);
     Appointment updateAppointment(Long id, Appointment appointment);
     void deleteAppointment(Long id);
+    List<Appointment> getAppointmentsByPatientId(Long patientId);
+    List<Appointment> getAppointmentsByDoctorId(Long doctorId);
+    Appointment updateAppointmentStatus(Long id, String newStatus);
 }

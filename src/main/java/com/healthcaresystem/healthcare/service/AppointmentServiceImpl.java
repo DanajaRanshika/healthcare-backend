@@ -29,6 +29,25 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public List<Appointment> getAppointmentsByPatientId(Long patientId) {
+        return appointmentRepository.findByPatientId(patientId);
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByDoctorId(Long doctorId) {
+        return appointmentRepository.findByDoctorId(doctorId);
+    }
+
+    @Override
+    public Appointment updateAppointmentStatus(Long id, String newStatus) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        appointment.setStatus(newStatus);
+        return appointmentRepository.save(appointment);
+    }
+
+    @Override
     public Appointment updateAppointment(Long id, Appointment updated) {
         Appointment appointment = appointmentRepository.findById(id).orElse(null);
         if (appointment == null) return null;
